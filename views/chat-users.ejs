@@ -1,0 +1,18 @@
+<%- include("partials/header.ejs") %>
+
+<a href="/home?user=<%= user %>" class="back-button">⬅ Back to Home</a>
+
+<div class="chat-users-page">
+  <h2>Start a Chat</h2>
+  <ul class="user-list">
+    <% for (let i = 0; i < allUsers.length; i++) { %>
+      <li>
+        <a class="chat-user-card" href="/chat?user=<%= user %>&with=<%= allUsers[i].username %>">
+          <%= allUsers[i].username %>
+        </a>
+      </li>
+    <% } %>
+  </ul>
+</div>
+
+<%- include("partials/footer.ejs") %>

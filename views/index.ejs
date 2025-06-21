@@ -1,0 +1,23 @@
+<%- include("partials/header.ejs", { page }) %>
+
+<div class="form-container">
+  <h2><%= page %></h2>
+  <p><%= code %></p>
+  <form method="post" action="<%= page %>">
+    <label>username:</label>
+    <input type="text" name="user" placeholder="Enter Username" required>
+
+    <label>password:</label>
+    <input type="password" name="pass" placeholder="Enter Password" required>
+
+    <input type="submit" value="<%= page %>">
+    
+    <% if(page === "Sign-up") { %>
+      <p>Already an user? <a href="/login">Login</a></p>
+    <% } else { %>
+      <p>Don't have an account? <a href="/">Sign-up</a></p>
+    <% } %>
+  </form>
+</div>
+
+<%- include("partials/footer.ejs") %>

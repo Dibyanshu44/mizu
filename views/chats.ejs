@@ -1,0 +1,55 @@
+<%- include("partials/header.ejs") %>
+
+<a href="/home?user=<%= user %>" class="back-button">⬅ Back to Home</a>
+
+<div class="chat-box chat-container">
+  <h2><%= withUser %></h2>
+
+  <ul class="message-thread" id="messages">
+    <% messages.forEach(msg => { %>
+      <li><strong><%= msg.sender %>:</strong> <%= msg.content %> <small>(<%= new Date(msg.sent_at).toLocaleString("en-IN", {
+        hour: '2-digit',
+        minute: '2-digit',
+        day: '2-digit',
+        month: 'short'
+      }) %>)</small></li>
+    <% }) %>
+  </ul>
+
+  <form class="message-form" id="chatForm">
+    <input type="hidden" id="sender" value="<%= user %>">
+    <input type="hidden" id="receiver" value="<%= withUser %>">
+    <input type="text" id="msgInput" placeholder="Type a message..." required>
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const sender = document.getElementById('sender').value;
+  const receiver = document.getElementById('receiver').value;
+  const messages = document.getElementById('messages');
+  const form = document.getElementById('chatForm');
+  const msgInput = document.getElementById('msgInput');
+
+  socket.emit("joinRoom", { sender, receiver });
+
+  socket.on("newMessage", (msg) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${msg.sender}:</strong> ${msg.content} <small>(${new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})</small>`;
+    messages.appendChild(li);
+    messages.scrollTop = messages.scrollHeight;
+  });
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const content = msgInput.value.trim();
+    if (content) {
+      socket.emit("sendMessage", { sender, receiver, content });
+      msgInput.value = "";
+    }
+  });
+</script>
+
+<%- include("partials/footer.ejs") %>

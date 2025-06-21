@@ -1,0 +1,48 @@
+<%- include("partials/header.ejs", { page: "home" }) %>
+
+<div class="home-layout">
+  <div class="home">
+    <h2>hello <%= user %></h2>
+   <form action="/logout" method="POST" class="floating-logout">
+  <button type="submit">Logout</button>
+</form>
+
+
+    <form method="POST" action="/post" class="post-form">
+      <textarea name="content" placeholder="What's flowing through your mind?" required></textarea>
+      <input type="hidden" name="user" value="<%= user %>">
+      <input type="submit" value="Post" />
+    </form>
+
+    <h3>All Posts</h3>
+    <% if (posts.length === 0) { %>
+      <p>No posts yet.</p>
+    <% } else { %>
+      <% posts.forEach(post => { %>
+        <div class="post">
+          <strong><%= post.username %>:</strong>
+          <p><%= post.content %></p>
+          <small><%= post.created_at.toLocaleString() %></small>
+        </div>
+        <hr />
+      <% }); %>
+    <% } %>
+  </div>
+
+  <div class="sidebar">
+    <h3>Connect Now</h3>
+    <ul class="chat-list">
+      <% for(let i = 0; i < allUsers.length; i++) { %>
+        <li>
+          <a class="chat-user" href="/chat?user=<%= user %>&with=<%= allUsers[i].username %>">
+            <%= allUsers[i].username %> 💬
+          </a>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</div>
+<a href="/chat-users?user=<%= user %>" class="floating-chat-bubble">💬</a>
+
+
+<%- include("partials/footer.ejs") %>
