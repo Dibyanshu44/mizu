@@ -123,6 +123,18 @@ io.on("connection", (socket) => {
   });
 });
 
+// Catches any uncaught error in routes
+app.use((err, req, res, next) => {
+  console.error("🔥 UNHANDLED ERROR:", err);
+  res.status(500).send("Something broke.");
+});
+
+// Catches uncaught server errors
+process.on("uncaughtException", (err) => {
+  console.error("💥 UNCAUGHT EXCEPTION:", err);
+});
+
+
 server.listen(port, () => {
   console.log("Server running on port", port);
 });
