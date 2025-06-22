@@ -9,10 +9,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-var port = 3000;
+// var port = 3000;
+const port = process.env.PORT || 3000;
+
 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 app.set("view engine", "ejs");
 
 // ROUTES
@@ -85,6 +88,11 @@ app.get("/chat", async (req, res) => {
     page: "Chat"
   });
 });
+
+app.post("/logout", (req, res) => {
+  res.redirect("/");
+});
+
 
 app.post("/chat", async (req, res) => {
   const { sender, receiver, content } = req.body;
