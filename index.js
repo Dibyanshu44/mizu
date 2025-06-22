@@ -20,9 +20,14 @@ app.set("view engine", "ejs");
 
 // ROUTES
 
+// app.get("/", (req, res) => {
+//   res.render("index.ejs", { code: null, page: "Sign-up" });
+// });
+
 app.get("/", (req, res) => {
-  res.render("index.ejs", { code: null, page: "Sign-up" });
+  res.send("✅ It works!");
 });
+
 
 app.post("/Sign-up", async (req, res) => {
   const user = req.body.user;
